@@ -1,0 +1,9 @@
+#include ” k e r n el / t y p e s . h”
+#include ” k e r n el / s t a t . h”
+#include ” u s e r / u s e r . h”
+int main ( void ) {
+p r i n t f ( ” H ell o World ! \ n” ) ;
+e x i t ( 0 ) ;
+}cd xv6-riscv
+ cd xv6-riscv
+
