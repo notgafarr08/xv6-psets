@@ -62,6 +62,8 @@ sys_sbrk(void)
   return addr;
 }
 
+
+
 uint64
 sys_pause(void)
 {
@@ -104,4 +106,22 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+uint64
+sys_interpose(void)
+{
+  struct proc *p = myproc();
+  int mask;
+
+  // arg0: integer mask
+  argint(0, &mask);                 // returns void in tree
+
+  // arg1: allowed path string (store in p->allow_path)
+  if (argstr(1, p->allow_path, sizeof(p->allow_path)) < 0) {
+    // If user passed a bad pointer, just clear it
+    p->allow_path[0] = 0;
+  }
+
+  p->deny_mask = (uint64)(uint32)mask;
+  return 0;
 }

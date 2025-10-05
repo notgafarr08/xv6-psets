@@ -1,0 +1,9 @@
+usertrap() in kernel trap.c called syscall it says in frame 1
+sys_open() = 15 , the number printed was 15 
+it was in user mode previously as it shows 0x200000022 in hex on sstatus which converted to bianry then we check bit 8 to check previous mode which is 0 meaning user mode
+80002842: lw a3,0(zero) , num = a3 
+The kernel crashes because 0x0 is not mapped in the kernel’s virtual address space (Figure 3-3). The instruction lw a3, 0(zero) tries to load from that address. scause confirms this with a load page fault code.
+(gdb) p p->name
+$1 = "init", '\000' <repeats 11 times>
+(gdb) p p->pid
+$2 = 1

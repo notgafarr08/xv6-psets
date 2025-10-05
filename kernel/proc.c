@@ -123,6 +123,8 @@ allocproc(void)
 
 found:
   p->pid = allocpid();
+  p->deny_mask = 0;
+  p->allow_path[0] = 0;
   p->state = USED;
 
   // Allocate a trapframe page.
@@ -168,6 +170,8 @@ freeproc(struct proc *p)
   p->chan = 0;
   p->killed = 0;
   p->xstate = 0;
+  p->deny_mask = 0;
+  p->allow_path[0] = 0;
   p->state = UNUSED;
 }
 
@@ -278,6 +282,10 @@ kfork(void)
 
   // Cause fork to return 0 in the child.
   np->trapframe->a0 = 0;
+  
+  // Get sandbox settings from parent
+  np->deny_mask = p->deny_mask;
+  safestrcpy(np->allow_path, p->allow_path, sizeof(np->allow_path));
 
   // increment reference counts on open file descriptors.
   for(i = 0; i < NOFILE; i++)
